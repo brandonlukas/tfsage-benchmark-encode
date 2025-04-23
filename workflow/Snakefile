@@ -1,0 +1,25 @@
+configfile: "config/config.yaml"
+
+
+def read_benchmark():
+    import pandas as pd
+
+    benchmark = pd.read_csv(config["inputs"]["benchmark"])
+    return benchmark
+
+
+benchmark = read_benchmark()
+query_ids = benchmark["id_query"].unique().tolist()
+factor_list = benchmark["target_factor"].unique().tolist()
+
+
+include: "rules/search.smk"
+include: "rules/sage.smk"
+include: "rules/scan.smk"
+include: "rules/benchmark.smk"
+
+
+rule all:
+    input:
+        rules.collect_ranking_metrics.output[0],
+        rules.collect_metrics.output[0],

@@ -1,0 +1,4 @@
+.snakemake/
+results/
+run_snakemake_batches.sh
+upload_box.sh

@@ -1,0 +1,47 @@
+inputs:
+  benchmark: "data/benchmark.csv"
+
+output_dir: "results"
+
+# Indexed ENCODE data
+index:
+  downloads_dir: "/mnt/wdssd/tfsage/encode/downloads"
+  data_dir: "/mnt/wdssd/tfsage/encode/data"
+  metadata: "/mnt/wdssd/tfsage/encode/resources/index.parquet"
+
+search:
+  features:
+    - tss
+    - gene
+  embeddings:
+    - CCAIntegration
+    - HarmonyIntegration
+    - JointPCAIntegration
+    - RPCAIntegration
+    - FastMNNIntegration
+    - none
+  metrics:
+    - euclidean
+    - cosine
+
+sage:
+  n: [1, 3, 7, 15, 21]
+  features: tss
+  embeddings: FastMNNIntegration
+  metric: cosine
+
+scan:
+  motif_dbs_dir: "/home/brandon/data/motif_databases"
+  motif_dbs:
+    - HOCOMOCOv11_HUMAN
+    - JASPAR2020_vertebrates
+    - CIS-BP
+    - gimme.vertebrate.v5.0
+
+benchmark:
+  test_set:
+    peak_width: 200
+    exclude_chroms: ["chrM", "chrY"]
+    n_samples: 10000
+    p_positive: 0.05
+    random_state: 42
