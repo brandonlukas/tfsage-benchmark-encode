@@ -76,3 +76,29 @@ rule collect_metrics:
         os.path.join(config["output_dir"], "benchmark/collect_results.csv"),
     script:
         "../scripts/benchmark/collect_metrics.py"
+
+
+rule compute_peak_stats:
+    input:
+        query_file=os.path.join(config["index"]["downloads_dir"], "{query_id}.bed"),
+        target_file=os.path.join(config["index"]["downloads_dir"], "{target_id}.bed"),
+    output:
+        os.path.join(
+            config["output_dir"], "benchmark/peak_stats/{query_id}/{target_id}.json"
+        ),
+    script:
+        "../scripts/benchmark/compute_peak_stats.py"
+
+
+rule collect_peak_stats:
+    input:
+        expand(
+            rules.compute_peak_stats.output[0],
+            zip,
+            query_id=benchmark["id_query"],
+            target_id=benchmark["id_factor"],
+        ),
+    output:
+        os.path.join(config["output_dir"], "benchmark/collect_peak_stats.csv"),
+    script:
+        "../scripts/benchmark/collect_metrics.py"
