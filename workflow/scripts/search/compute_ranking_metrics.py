@@ -44,6 +44,11 @@ def compute_ranking_metrics(inputs, output_file, wildcards):
 
 
 def ranked_list_metrics(ranked_list: pd.DataFrame) -> dict:
+    # Sort by descending score first
+    ranked_list = ranked_list.sort_values("score", ascending=False).reset_index(
+        drop=True
+    )
+
     ranked_list = ranked_list.assign(
         rank=lambda x: x["score"].rank(ascending=False),
         precision=lambda x: x["hit"].cumsum() / x["rank"],

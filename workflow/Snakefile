@@ -22,5 +22,5 @@ include: "rules/benchmark.smk"
 rule all:
     input:
         rules.collect_ranking_metrics.output[0],
-        rules.collect_metrics.output[0],
-        rules.collect_peak_stats.output[0],
+        # rules.collect_metrics.output[0],
+        # rules.collect_peak_stats.output[0],
