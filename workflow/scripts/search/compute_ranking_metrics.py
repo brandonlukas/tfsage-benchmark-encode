@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 from sklearn import metrics
 from tqdm import tqdm
@@ -25,6 +26,16 @@ def compute_ranking_metrics(inputs, output_file, wildcards):
         record = ranked_list_metrics(ranked_list)
         record["id_query"] = id_query
         record["target_factor"] = target_factor
+
+        # Randomly assign scores for the ranked list
+        np.random.seed(42)  # For reproducibility
+        ranked_list_random = ranked_list.assign(
+            score=np.random.uniform(0, 1, size=len(ranked_list))
+        )
+        record_random = ranked_list_metrics(ranked_list_random)
+        for key in record_random.keys():
+            record[f"{key}_random"] = record_random[key]
+
         records.append(record)
 
     results = (
